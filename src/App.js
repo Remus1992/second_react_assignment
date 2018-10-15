@@ -6,27 +6,27 @@ import CharComponent from './CharComponent/CharComponent'
 class App extends Component {
     state = {
         userInput: '',
-        userInputLetterList: [],
     };
 
     inputChangedHandler = (event) => {
         this.setState({userInput: event.target.value})
     };
 
-    inputSplitHandler = (event) =>{
-        this.setState.userInputLetterList = this.state.userInput.split();
-
+    deleteCharHandler = (index) => {
+        const text = this.state.userInput.split('');
+        text.splice(index, 1);
+        const updatedText = text.join('');
+        this.setState({userInput: updatedText})
     };
 
     render() {
-        if (this.state.userInput) {
-            letters = (
-                <div>
-                    <CharComponent
-                    changed={this.inputSplitHandler}/>
-                </div>
-            )
-        }
+        const charList = this.state.userInput.split('').map((ch, index) => {
+            return <CharComponent
+                character={ch}
+                key={index}
+                clicked={() => this.deleteCharHandler(index)}/>;
+        });
+
         return (
             <div className="App">
                 <p>Enter Text</p>
@@ -35,7 +35,7 @@ class App extends Component {
                        value={this.state.userInput}/>
                 <p>{this.state.userInput}</p>
                 <Validation userInputLength={this.state.userInput.length}/>
-
+                {charList}
             </div>
         );
     }
